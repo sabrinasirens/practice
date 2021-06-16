@@ -1,0 +1,21 @@
+---
+- name: Set up extra practice
+  hosts: servera
+  vars_files: vars
+  become: yes
+  tasks:
+    - name: Install apache
+      yum:
+        name: httpd
+        state: present
+    - name: Create a fun file
+      template:
+        src: templates/fun1.j2
+        dest: "{{ docroot }}/fun1"
+    - name: Create two more files
+      command:
+        cmd: touch "{{ docroot }"/index.html "{{ docroot }}"/fun2
+    - name: Create httpd servera.conf
+      template:
+        src: templates/servera.j2
+        dest: /etc/httpd/conf.d/servera.conf
