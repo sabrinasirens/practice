@@ -14,8 +14,17 @@
         dest: "{{ docroot }}/fun1"
     - name: Create two more files
       command:
-        cmd: touch "{{ docroot }"/index.html "{{ docroot }}"/fun2
+        cmd: touch {{ docroot }}/index.html {{ docroot }}/fun2
     - name: Create httpd servera.conf
       template:
         src: templates/servera.j2
         dest: /etc/httpd/conf.d/servera.conf
+    
+    - name: Be mean
+      community.general.sefcontext:
+        target: "{{ docroot }}/fun1"
+        setype: var_t
+        state: present
+
+    - name: Apply new SELinux file context to filesystem
+      ansible.builtin.command: restorecon -R -v {{ docroot }}/fun1
