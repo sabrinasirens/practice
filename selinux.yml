@@ -21,10 +21,10 @@
         dest: /etc/httpd/conf.d/servera.conf
     
     - name: Be mean
-      community.general.sefcontext:
+      sefcontext:
         target: "{{ docroot }}/fun1"
         setype: var_t
         state: present
 
     - name: Apply new SELinux file context to filesystem
-      ansible.builtin.command: restorecon -R -v {{ docroot }}/fun1
+      command: restorecon -R -v {{ docroot }}/fun1
